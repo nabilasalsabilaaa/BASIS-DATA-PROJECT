@@ -14,15 +14,17 @@ RESET = "\033[0m"
 print(f"\n{HIJAU}================================================================================{RESET}")
 print("DATA ALL KARYAWAN MENTAH:")
 print(f"{HIJAU}================================================================================{RESET}")
+print(f"{'Nama':<22} | {'Divisi':<10} | {'Gaji':<12} | {'Status':<10} | {'Tahun Masuk'}")
+print(f"{HIJAU}--------------------------------------------------------------------------------{RESET}")
 
 semua = list(koleksi.find({}, {"_id": 0}))
 for k in semua:
-    print(f"Nama: {k['nama']}, Divisi: {k['divisi']}, Gaji: {k['gaji']}, Status: {k['status']}, Tahun: {k['tahun_masuk']}")
+    print(f"{k['nama']:<22} | {k['divisi']:<10} | Rp {k['gaji']:<9} | {k['status']:<10} | {k['tahun_masuk']}")
 
 # 2. QUERY 1: $and + $gt
-print(f"\n{BIRU}============================================================{RESET}")
+print(f"\n{BIRU}================================================================================{RESET}")
 print("HASIL QUERY 1 (TETAP DAN GAJI > 7 JUTA):")
-print(f"{BIRU}============================================================{RESET}")
+print(f"{BIRU}================================================================================{RESET}")
 
 q1 = list(koleksi.find({
     "$and": [
@@ -33,13 +35,12 @@ q1 = list(koleksi.find({
 
 print(f"Total data ditemukan: {len(q1)}")
 for k in q1:
-    #<22 bikin nama rata spasi, tanda hubung dan nominal gaji langsung lurus ke bawah
     print(f"-> {k['nama']:<22} - Rp {k['gaji']}")
 
 # 3. QUERY 2: $in
-print(f"\n{KUNING}========================================================{RESET}")
+print(f"\n{KUNING}================================================================================{RESET}")
 print("HASIL QUERY 2 (IT ATAU FINANCE):")
-print(f"{KUNING}========================================================{RESET}")
+print(f"{KUNING}================================================================================{RESET}")
 
 q2 = list(koleksi.find({
     "divisi": {"$in": ["IT", "Finance"]}
@@ -47,13 +48,12 @@ q2 = list(koleksi.find({
 
 print(f"Total data ditemukan: {len(q2)}")
 for k in q2:
-    #<22 bikin nama rata spasi, tanda hubung dan nama divisi langsung sejajar
     print(f"-> {k['nama']:<22} - {k['divisi']}")
 
 # 4. AGGREGATION PIPELINE
-print(f"\n{CYAN}====================================={RESET}")
+print(f"\n{CYAN}================================================================================{RESET}")
 print("HASIL AGREGASI (RATA-RATA GAJI PER DIVISI):")
-print(f"{CYAN}====================================={RESET}")
+print(f"{CYAN}================================================================================{RESET}")
 
 pipeline = [
     {"$match": {"status": "Tetap"}},
@@ -67,9 +67,8 @@ pipeline = [
 hasil = list(koleksi.aggregate(pipeline))
 
 for h in hasil:
-    #<9 bikin nama divisi otomatis rata spasi, jadi garis tengahnya lurus
     print(f"Divisi: {h['_id']:<9} | Total: {h['jumlah']} orang | Rata-rata: Rp {h['rata_gaji']:.2f}")
 
-print(f"{CYAN}==============================================================={RESET}\n")
+print(f"{CYAN}================================================================================{RESET}\n")
 
 client.close()

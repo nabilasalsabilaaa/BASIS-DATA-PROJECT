@@ -30,4 +30,7 @@ try:
 
 except ConnectionFailure as e:
     print(f"Gagal konek ke MongoDB: {e}")
-    print("Pastikan MongoDB sudah dijalankan dulu.")
+    print("Pastikan MongoDB sudah dijalankan dan mendengarkan pada port 27017")
+except Exception as e:
+    print(f"Terjadi error: {e}")
+    client.close()
